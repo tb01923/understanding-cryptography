@@ -1,0 +1,15 @@
+node_modules/
+npm-debug.log
+.idea/
+client/my-angular-all.js
+dummy-json/output/*
+test/unit_test_reports/*
+reports/
+coverage/
+build/
+e2e/testresults/*
+e2e/download/*
+client/css/frt-efr-style.css
+client/css/ie-patch.css
+client/css/frt-unauthorized.css
+npm-install.log
