@@ -1,4 +1,4 @@
-const {reduce, curry} = require('./functional-bits')
+const {reduce, pipe, curry} = require('./functional-bits')
 
 const maxOr = curry( (def, arr) =>
     (arr.length > 0) ?
@@ -35,5 +35,12 @@ const numberOfKeys = pipe([
     length
 ])
 
+const  gcd = function(a, b) {
+    if ( ! b) {
+        return a;
+    }
 
-module.exports = {maxOr, increment, appendToObj, appendToArray, floor_modulo, values, keys, join, length, numberOfKeys}
+    return gcd(b, a % b);
+};
+
+module.exports = {maxOr, increment, appendToObj, appendToArray, floor_modulo, values, keys, join, length, numberOfKeys, gcd}

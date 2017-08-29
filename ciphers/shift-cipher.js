@@ -19,31 +19,45 @@ const getNextValue = pipe([
     increment
 ])
 
-// enryptCharacter  :: ({character: Number} -> Number -> Number -> character -> character) ->
-//                                          {character: Number} -> Number -> Number -> [character] -> [character]
+// appendToArrayReducer :: ({character: Number} -> Number -> Number -> character -> character) ->
+//                                    {character: Number} -> Number -> Number -> [character] -> character -> [character]
+const appendToArrayReducer = curry((algo, alphabetMap, k, m, arr, x) =>
+    appendToArray(
+        arr, algo(alphabetMap, k, m, x)
+    )
+)
+
+// applyWith :: ({character: Number} -> Number -> Number -> character -> character) ->
+//                                {character: Number} -> Number -> Number -> [character] -> [character]
 const applyWith = curry((algo, alphabetMap, k, m, xs) =>
     reduce(
-        (arr, x) => appendToArray(
-        arr, algo(alphabetMap, k, m, x))
+        appendToArrayReducer(algo, alphabetMap, k, m)
         ,[]
         , xs
     )
 )
 
+// applyWith :: ({character: Number} -> Number -> Number -> character -> character) ->
+//                                {character: Number} -> Number -> Number -> String -> String
+applyWithAsString = (algo, alphabetMap, k, m) => pipe([
+    applyWith(algo, alphabetMap, k, m),
+    join
+])
+
 // enryptCharacter  :: {character: Number} -> Number -> Number -> character -> character
-const encryptCharacter = curry((alphabetMap, k, m, x) => {
-    const rawValue = alphabetMap[x]
-    const shiftValue = floor_modulo((rawValue + k), m)
-    const shiftCharacter = find(alphabetMap, shiftValue)
-    return shiftCharacter
+const encryptCharacter = curry((alphabetMap, k, m, plainCharacter) => {
+    const x = alphabetMap[plainCharacter]
+    const y = floor_modulo(x + k, m)
+    const cipherCharacter = find(alphabetMap, y)
+    return cipherCharacter
 })
 
 // decryptCharacter  :: {character: Number} -> Number -> Number -> character -> character
-const decryptCharacter = curry((alphabetMap, k, m, x) => {
-    const shiftValue = alphabetMap[x]
-    const rawValue = floor_modulo((shiftValue - k), m)
-    const rawCharacter = find(alphabetMap, rawValue)
-    return rawCharacter
+const decryptCharacter = curry((alphabetMap, k, m, cipherCharacter) => {
+    const y = alphabetMap[cipherCharacter]
+    const x = floor_modulo(y - k, m)
+    const plainCharacter = find(alphabetMap, x)
+    return plainCharacter
 })
 
 // shiftCipher :: string, Number -> { encrypt :: string -> string, decrypt :: string -> string }
@@ -52,15 +66,11 @@ const shiftCipher = (alphabet, k) => {
     const alphabetMap = arrayToAlphabetMap(alphabetArray)
     const m = numberOfKeys(alphabetMap)
 
+
+
     return {
-        encrypt: pipe([
-            applyWith(encryptCharacter, alphabetMap, k, m),
-            join
-        ]),
-        decrypt: pipe([
-            applyWith(decryptCharacter, alphabetMap, k, m),
-            join
-        ]),
+        encrypt: applyWithAsString(encryptCharacter, alphabetMap, k, m),
+        decrypt: applyWithAsString(decryptCharacter, alphabetMap, k, m),
     }
 }
 
