@@ -87,7 +87,7 @@ const affineCipher = (alphabet, a, b) => {
 }
 
 const raw = 'AFFINE CIPHER'.toLowerCase()
-const cipher = affineCipher(alphabet, 2, 8)
+const cipher = affineCipher(alphabet, 3, 8)
 const secret = cipher.encrypt(raw)
 const raw2 = cipher.decrypt(secret)
 console.log(raw, secret, raw2)
