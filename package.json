@@ -1,0 +1,23 @@
+{
+  "name": "understanding_cryptography",
+  "version": "1.0.0",
+  "description": "A series of spikes to help me work through the Paar and Pelzl book Understanding Cryptography.",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha --recursive --reporter spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tb01923/understanding-cryptography.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tb01923/understanding-cryptography/issues"
+  },
+  "homepage": "https://github.com/tb01923/understanding-cryptography#readme",
+  "dependencies": {
+    "chai": "^4.1.1",
+    "mocha": "^3.5.0"
+  }
+}
