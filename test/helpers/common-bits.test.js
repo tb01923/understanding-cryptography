@@ -5,7 +5,7 @@ const mocha = require('mocha')
 const { maxOr, increment, appendToObj, appendToArray, floor_modulo,
     values, keys, join, length, numberOfKeys, gcd } = require('../../helpers/common-bits')
 
-describe('common-bits', () => {
+describe('helpers/common-bits', () => {
     describe('maxOr', () => {
         it('maxOr should return the max of an array not default value', () => {
             maxOr(-1, [10,22,10]).should.be.equal(22) ;

@@ -1,23 +1,7 @@
-const {reduce, pipe, curry, find} = require('../helpers/functional-bits')
-const {maxOr, increment, appendToObj, appendToArray, join, length,
-    floor_modulo, numberOfKeys, values, gcd} = require('../helpers/common-bits')
+const {arrayToAlphabetMap } = require('./alphabet-map')
+const {reduce, pipe, curry, findKeyByValue} = require('../helpers/functional-bits')
+const {appendToArray, join,  floor_modulo, numberOfKeys, gcd} = require('../helpers/common-bits')
 
-const maxOrNegOne = maxOr(-1)
-
-const alphabet = 'abcdefghijklmnopqrstuvwxyz'
-
-// arrayToAlphabetMap :: [k] -> {k: Number}
-const arrayToAlphabetMap = reduce(
-    (map, a) => appendToObj(map, a, getNextValue(map)),
-    {}
-)
-
-// getNextValue :: {character: Number} -> Number
-const getNextValue = pipe([
-    values,
-    maxOrNegOne,
-    increment
-])
 
 // appendToArrayReducer :: ({character: Number} -> Number -> Number -> character -> character) ->
 //                                    {character: Number} -> Number -> Number -> Number -> [character] -> character -> [character]
@@ -57,7 +41,7 @@ const inverse = (m, a, i) => {
 const encryptCharacter = curry((alphabetMap, a, b, m, plainCharacter) => {
     const x = alphabetMap[plainCharacter]
     const y = floor_modulo(a * x + b, m)
-    const cipherCharacter = find(alphabetMap, y)
+    const cipherCharacter = findKeyByValue(alphabetMap, y)
     return cipherCharacter
 })
 
@@ -66,7 +50,7 @@ const decryptCharacter = curry((alphabetMap, a, b, m, cipherCharacter) => {
     const y = alphabetMap[cipherCharacter]
     const inv = inverse(m, a)
     const x = floor_modulo(inv * (y - b), m)
-    const plainCharacter = find(alphabetMap, x)
+    const plainCharacter = findKeyByValue(alphabetMap, x)
     return plainCharacter
 })
 
@@ -86,8 +70,8 @@ const affineCipher = (alphabet, a, b) => {
     }
 }
 
-const raw = 'AFFINE CIPHER'.toLowerCase()
-const cipher = affineCipher(alphabet, 3, 8)
-const secret = cipher.encrypt(raw)
-const raw2 = cipher.decrypt(secret)
-console.log(raw, secret, raw2)
+module.exports = {
+    affineCipher,
+    encryptCharacter,
+    decryptCharacter
+}

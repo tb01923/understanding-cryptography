@@ -29,11 +29,11 @@ const pipe = curry((xs, a) =>
 )
 
 // find :: {k: v}, v -> k
-const find = (obj, value) =>
+const findKeyByValue = (obj, value) =>
     Object.keys(obj).filter(
         (key) => obj[key] === value
     )[0]
 
 module.exports  = {
-    reduce, curry, pipe, find, head, tail
+    reduce, curry, pipe, findKeyByValue, head, tail
 }
