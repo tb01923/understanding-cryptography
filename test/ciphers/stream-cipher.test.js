@@ -2,7 +2,7 @@ const mocha = require('mocha')
     , chai = require('chai')
     , should = chai.should() ;
 
-const { xor, stringToBitArray } = require('../../ciphers/block-cipher')
+const { xor, stringToBitArray } = require('../../ciphers/stream-cipher')
 
 const { length, keys } = require('../../helpers/common-bits')
 const { pipe } = require('../../helpers/functional-bits')
