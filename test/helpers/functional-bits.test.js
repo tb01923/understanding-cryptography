@@ -2,7 +2,7 @@ const mocha = require('mocha')
     , chai = require('chai')
     , should = chai.should() ;
 
-const { reduce, curry, pipe, findKeyByValue, head, tail } = require('../../helpers/functional-bits')
+const { reduce, curry, pipe, findKeyByValue, head, tail, map } = require('../../helpers/functional-bits')
 
 describe('helpers/functional-bits', () => {
     describe('head', () => {
@@ -59,4 +59,21 @@ describe('helpers/functional-bits', () => {
             (typeof findKeyByValue({'a':1,'b':2,'c':3}, 4)).should.equal('undefined') ;
         })
     })
+    describe('map', () => {
+        it('should partial apply a function', () => {
+            const increment = x => x + 1
+            map(increment).should.be.a('function') ;
+        })
+        it('should work on an empty array', () => {
+            const increment = x => x + 1
+            map(increment, []).should.be.an('array').with.a.lengthOf(0);
+        })
+        it('should work on all elements', () => {
+            const increment = x => x + 1
+            map(increment, [0,2]).should.be.an('array').with.a.lengthOf(2).to.include(1);
+            map(increment, [0,2]).should.be.an('array').with.a.lengthOf(2).to.include(3);
+        })
+    })
+
+
 })

@@ -34,6 +34,24 @@ const findKeyByValue = (obj, value) =>
         (key) => obj[key] === value
     )[0]
 
+// append :: [a] -> a -> [a]
+const append = curry((xs, x) =>
+    xs.concat([x])
+)
+
+// appendingCombiner :: (a -> b) -> ([b], a) -> [b]
+const appendingCombiner = f =>
+    (agg, x) =>
+        append(agg, f(x))
+
+// map :: (a -> b) -> [a] -> [b]
+const map = curry((f, xs) =>
+    reduce(
+        appendingCombiner(f)
+        , []
+        , xs))
+
+
 module.exports  = {
-    reduce, curry, pipe, findKeyByValue, head, tail
+    reduce, curry, pipe, findKeyByValue, head, tail, map
 }

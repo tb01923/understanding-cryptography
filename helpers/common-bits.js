@@ -40,6 +40,10 @@ const join  = arr => arr.join('')
 // join :: [] -> Number
 const length = arr => arr.length
 
+// split :: String -> []
+const split = str => str.split('')
+
+
 // numberOfKeys :: {} -> Number
 const numberOfKeys = pipe([
     keys,
@@ -63,5 +67,6 @@ module.exports = {
     join,
     length,
     numberOfKeys,
-    gcd
+    gcd,
+    split
 }

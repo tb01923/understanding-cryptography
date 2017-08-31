@@ -2,7 +2,7 @@ const mocha = require('mocha')
     , chai = require('chai')
     , should = chai.should() ;
 
-const { maxOr, increment, appendToObj, appendToArray, floor_modulo,
+const { maxOr, increment, appendToObj, appendToArray, floor_modulo, split,
     values, keys, join, length, numberOfKeys, gcd } = require('../../helpers/common-bits')
 
 describe('helpers/common-bits', () => {
@@ -103,4 +103,16 @@ describe('helpers/common-bits', () => {
             gcd(20,10).should.equal(10)
         })
     })
+
+    describe('split', () => {
+        it('should return an empty array when passed an empty string', () => {
+            split('').should.be.an('array').with.a.lengthOf(0);
+        })
+        it('should return a ', () => {
+            split('12').should.be.an('array').with.a.lengthOf(2).to.include('1');
+            split('12').should.be.an('array').with.a.lengthOf(2).to.include('2');
+        })
+    })
+
+
 })
