@@ -14,15 +14,20 @@ const cipherBuffer = (keyByte, byteBuffer) => {
     return cipherByteBuffer
 }
 
+
+const keyIterator = (byteKeyArray) => {
+    const byteSize = 8
+    const byteKeyRing = ByteKeyRing(byteSize, byteKeyArray)
+    return () => byteKeyRing.next().value
+}
+
 const streamCipher = (byteKeyArray) =>{
 
-    byteSize = 8
-    const byteKeyRing = ByteKeyRing(byteSize, byteKeyArray)
-    const getKey = () => byteKeyRing.next().value
+    const nextKey = keyIterator(byteKeyArray)
 
     return new Transform({
         transform(byteBuffer, encoding, callback) {
-            const keyByte = getKey()
+            const keyByte = nextKey()
             const cipherByteBuffer = cipherBuffer(keyByte, byteBuffer)
             this.push(cipherByteBuffer);
             callback();

@@ -18,15 +18,11 @@ const decrypt = streamCipher(key)
 
 const c = readStreamFromString("A message from me\n")
     .pipe(encrypt)
-    .pipe(decrypt) ;
-
+    //.pipe(decrypt) ;
 
 let string = ''
-c.on('data', function(data){
-    var part = c.read(10);
-    string += part.toString();
-    console.log('stream data ' + part);
-});
+c.on('data', part => string += part)
+c.on('end', () => console.log(string) )
 
 // const { ByteKeyRing } = require('./ciphers/cipher-helpers/byte-key-ring')
 // const byteKeyRing = ByteKeyRing(8, [0])
