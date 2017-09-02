@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/tb01923/understanding-cryptography#readme",
   "dependencies": {
+    "bitstream": "0.0.1",
     "chai": "^4.1.1",
     "mocha": "^3.5.0"
   }

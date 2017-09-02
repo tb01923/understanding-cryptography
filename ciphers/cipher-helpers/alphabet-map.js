@@ -1,5 +1,5 @@
-const {reduce, pipe} = require('../helpers/functional-bits')
-const {maxOr, increment, appendToObj, values} = require('../helpers/common-bits')
+const {reduce, pipe} = require('../../general-helpers/functional-bits')
+const {maxOr, increment, appendToObj, values} = require('../../general-helpers/common-bits')
 
 const maxOrNegOne = maxOr(-1)
 

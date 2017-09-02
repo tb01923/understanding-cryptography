@@ -2,9 +2,9 @@ const mocha = require('mocha')
     , chai = require('chai')
     , should = chai.should() ;
 
-const { reduce, curry, pipe, findKeyByValue, head, tail, map } = require('../../helpers/functional-bits')
+const { reduce, curry, pipe, findKeyByValue, head, tail, map } = require('../../general-helpers/functional-bits')
 
-describe('helpers/functional-bits', () => {
+describe('general-helpers/functional-bits', () => {
     describe('head', () => {
         it('should return the first item in the list', () => {
             head([10,22,123]).should.be.equal(10) ;

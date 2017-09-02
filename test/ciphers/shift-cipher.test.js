@@ -3,8 +3,8 @@ const mocha = require('mocha')
     , should = chai.should() ;
 
 const { shiftCipher, encryptCharacter, decryptCharacter } = require('../../ciphers/shift-cipher')
-const { englishAlphabet } = require('../../ciphers/alphabet-map')
-const { numberOfKeys } = require('../../helpers/common-bits')
+const { englishAlphabet } = require('../../ciphers/cipher-helpers/alphabet-map')
+const { numberOfKeys } = require('../../general-helpers/common-bits')
 
 describe('ciphers/shift-cipher', () => {
 

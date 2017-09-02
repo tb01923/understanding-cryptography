@@ -2,12 +2,12 @@ const mocha = require('mocha')
     , chai = require('chai')
     , should = chai.should() ;
 
-const { arrayToAlphabetMap, getNextValue } = require('../../ciphers/alphabet-map')
+const { arrayToAlphabetMap, getNextValue } = require('../../../ciphers/cipher-helpers/alphabet-map')
 
-const { length, keys } = require('../../helpers/common-bits')
-const { pipe } = require('../../helpers/functional-bits')
+const { length, keys } = require('../../../general-helpers/common-bits')
+const { pipe } = require('../../../general-helpers/functional-bits')
 
-describe('ciphers/alphabet-map', () => {
+describe('ciphers/cipher-helpers/alphabet-map', () => {
 
     describe('arrayToAlphabetMap', () => {
         it('should convert a string to a map (pojso)', () => {

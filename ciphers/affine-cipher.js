@@ -1,6 +1,6 @@
-const {arrayToAlphabetMap } = require('./alphabet-map')
-const {reduce, pipe, curry, findKeyByValue} = require('../helpers/functional-bits')
-const {appendToArray, join,  floor_modulo, numberOfKeys, gcd} = require('../helpers/common-bits')
+const {arrayToAlphabetMap } = require('./cipher-helpers/alphabet-map')
+const {reduce, pipe, curry, findKeyByValue} = require('../general-helpers/functional-bits')
+const {appendToArray, join,  floor_modulo, numberOfKeys, gcd} = require('../general-helpers/common-bits')
 
 
 // appendToArrayReducer :: ({character: Number} -> Number -> Number -> character -> character) ->

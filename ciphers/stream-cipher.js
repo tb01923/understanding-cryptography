@@ -1,44 +1,40 @@
-const {arrayToAlphabetMap } = require('./alphabet-map')
-const {reduce, pipe, curry, findKeyByValue, map} = require('../helpers/functional-bits')
-const {split, appendToArray, join,  floor_modulo, numberOfKeys } = require('../helpers/common-bits')
+const { Transform } = require('stream');
+const { ByteKeyRing } = require('./cipher-helpers/byte-key-ring');
+const { curry } = require('../general-helpers/functional-bits')
 
-// xor :: Number, Number -> Number
-const xor = (a,b) => (!a != !b) ? 1 : 0
 
-const stringToBitArray = pipe([
-    split,
-    map(parseInt)
-])
+const readBuffer = b => b.readUIntBE(0, 1)
+const bufferOf = x => Buffer.alloc(1, x)
+const xor = curry((a,b) => a ^ b)
 
-// encryptCharacter  ::
-const encryptCharacter = curry((keyStream, plainCharacter) => {
-    const x = alphabetMap[plainCharacter]
-    const y = floor_modulo(x + k, m)
-    const cipherCharacter = findKeyByValue(alphabetMap, y)
-    return cipherCharacter
-})
-
-// decryptCharacter  ::
-const decryptCharacter = curry((keyStream, cipherCharacter) => {
-    const y = alphabetMap[cipherCharacter]
-    const x = floor_modulo(y - k, m)
-    const plainCharacter = findKeyByValue(alphabetMap, x)
-    return plainCharacter
-})
-
-// blockCipher ::
-const blockCipher = (keyStream) => {
-
-    return {
-        encrypt: applyWithAsString(encryptCharacter, keyStream),
-        decrypt: applyWithAsString(decryptCharacter, keyStream),
-    }
+const cipherBuffer = (keyByte, byteBuffer) => {
+    const plainByte = readBuffer(byteBuffer)
+    const cipherByte = xor(keyByte, plainByte)
+    const cipherByteBuffer = bufferOf(cipherByte)
+    return cipherByteBuffer
 }
 
+const streamCipher = (byteKeyArray) =>{
+
+    byteSize = 8
+    const byteKeyRing = ByteKeyRing(byteSize, byteKeyArray)
+    const getKey = () => byteKeyRing.next().value
+
+    return new Transform({
+        transform(byteBuffer, encoding, callback) {
+            const keyByte = getKey()
+            const cipherByteBuffer = cipherBuffer(keyByte, byteBuffer)
+            this.push(cipherByteBuffer);
+            callback();
+        }
+    });
+}
+
+
 module.exports = {
-    blockCipher,
-    encryptCharacter,
-    decryptCharacter,
     xor,
-    stringToBitArray
+    bufferOf,
+    readBuffer,
+    cipherBuffer,
+    streamCipher
 }
