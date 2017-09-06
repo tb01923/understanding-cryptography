@@ -34,10 +34,7 @@ const values = (o) => Object.values(o)
 // values :: {k: v} -> [String]
 const keys = (o) => Object.keys(o)
 
-// join :: [] -> String
-const join  = arr => arr.join('')
-
-// join :: [] -> Number
+// length :: [] -> Number
 const length = arr => arr.length
 
 // split :: String -> []
@@ -56,6 +53,15 @@ const  gcd = (a, b) =>
         a :
         gcd(b, a % b);
 
+const arrayOf = x =>  Array(x).fill(1);
+const parseIntBinary = str => parseInt(str,2)
+
+const clone = arr => arr.slice(0)
+
+// join :: String -> [] -> String
+const join = char => arr => arr.join(char)
+
+
 module.exports = {
     maxOr,
     increment,
@@ -68,5 +74,9 @@ module.exports = {
     length,
     numberOfKeys,
     gcd,
-    split
+    split,
+    arrayOf,
+    parseIntBinary,
+    clone,
+    join
 }

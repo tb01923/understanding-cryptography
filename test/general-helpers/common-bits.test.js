@@ -74,10 +74,10 @@ describe('general-helpers/common-bits', () => {
     })
     describe('join', () => {
         it('should return an empty string when passed an empty array', () => {
-            join([]).should.equal('')
+            join('')([]).should.equal('')
         })
         it('should return a string with all values concatenated', () => {
-            join([1,2,3]).should.equal('123')
+            join('')([1,2,3]).should.equal('123')
         })
     })
     describe('length', () => {

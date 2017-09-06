@@ -25,7 +25,7 @@ const applyWith = curry((algo, alphabetMap, a, b, m, xs) =>
 //                                {character: Number} -> Number -> Number -> Number -> String -> String
 const applyWithAsString = (algo, alphabetMap, a, b, m) => pipe([
     applyWith(algo, alphabetMap, a, b, m),
-    join
+    join('')
 ])
 
 

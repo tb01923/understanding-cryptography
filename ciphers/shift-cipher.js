@@ -25,7 +25,7 @@ const applyWith = curry((algo, alphabetMap, k, m, xs) =>
 //                                {character: Number} -> Number -> Number -> String -> String
 const applyWithAsString = (algo, alphabetMap, k, m) => pipe([
     applyWith(algo, alphabetMap, k, m),
-    join
+    join('')
 ])
 
 // enryptCharacter  :: {character: Number} -> Number -> Number -> character -> character
