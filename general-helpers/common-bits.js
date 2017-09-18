@@ -1,4 +1,4 @@
-const {pipe, curry} = require('./functional-bits')
+const {map, pipe, curry, flatten} = require('./functional-bits')
 
 // maxOr :: Number -> [Number] -> Number
 const maxOr = curry( (def, arr) =>
@@ -53,7 +53,7 @@ const  gcd = (a, b) =>
         a :
         gcd(b, a % b);
 
-const arrayOf = x =>  Array(x).fill(1);
+const arrayOf = curry((x, l) =>  Array(l).fill(x));
 const parseIntBinary = str => parseInt(str,2)
 
 const clone = arr => arr.slice(0)
@@ -61,6 +61,30 @@ const clone = arr => arr.slice(0)
 // join :: String -> [] -> String
 const join = char => arr => arr.join(char)
 
+const bitArrayFromBinaryString = pipe([
+    split,
+    map(parseInt)
+])
+
+const charCode = str => str.charCodeAt(0)
+
+const intToBitArray = (len) => (int) => {
+    const arr = []
+    for(var i = 0; i < len; ++i)
+        arr[i] = (int >> i) & 1;
+    return arr
+}
+
+
+const bitArrayFromString = byteLength => pipe([
+    split,
+    map(charCode),
+    map(parseInt),
+    map(intToBitArray(byteLength)),
+    flatten
+])
+
+const slice = (a,b) => arr => arr.slice(a,b)
 
 module.exports = {
     maxOr,
@@ -78,5 +102,9 @@ module.exports = {
     arrayOf,
     parseIntBinary,
     clone,
-    join
+    join,
+    bitArrayFromBinaryString,
+    bitArrayFromString,
+    intToBitArray,
+    slice
 }

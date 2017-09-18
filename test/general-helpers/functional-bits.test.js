@@ -1,8 +1,7 @@
-const mocha = require('mocha')
-    , chai = require('chai')
+const chai = require('chai')
     , should = chai.should() ;
 
-const { reduce, curry, pipe, findKeyByValue, head, tail, map } = require('../../general-helpers/functional-bits')
+const { reduce, curry, pipe, findKeyByValue, head, tail, map, flatten } = require('../../general-helpers/functional-bits')
 
 describe('general-helpers/functional-bits', () => {
     describe('head', () => {
@@ -51,6 +50,18 @@ describe('general-helpers/functional-bits', () => {
             pipe([double, square])(2).should.equal(16)
         })
     })
+    describe('flatten', () => {
+        it('should join arrays', () => {
+            flatten([[1,2,3],[4,5,6]]).should.deep.equal([1,2,3,4,5,6])
+        })
+        it('should not break with nesting a single array', () => {
+            flatten([[1,2,3]]).should.deep.equal([1,2,3])
+        })
+        it('should not break without nesting', () => {
+            flatten([1,2,3]).should.deep.equal([1,2,3])
+        })
+    })
+
     describe('findKeyByValue', () => {
         it('should return the key if the value is present', () => {
             findKeyByValue({'a':1,'b':2,'c':3}, 2).should.equal('b');

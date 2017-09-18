@@ -51,7 +51,12 @@ const map = curry((f, xs) =>
         , []
         , xs))
 
+const flatten = xs =>
+    reduce(
+        (agg, x) => agg.concat(x)
+        , []
+        , xs)
 
 module.exports  = {
-    reduce, curry, pipe, findKeyByValue, head, tail, map
+    reduce, curry, pipe, findKeyByValue, head, tail, map, flatten
 }

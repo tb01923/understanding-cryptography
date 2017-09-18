@@ -1,5 +1,4 @@
-const mocha = require('mocha')
-    , chai = require('chai')
+const chai = require('chai')
     , should = chai.should() ;
 
 const { shiftCipher, encryptCharacter, decryptCharacter } = require('../../ciphers/shift-cipher')

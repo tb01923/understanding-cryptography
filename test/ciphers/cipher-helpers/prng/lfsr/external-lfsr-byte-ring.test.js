@@ -1,11 +1,10 @@
-const mocha = require('mocha')
-    , chai = require('chai')
+const chai = require('chai')
     , should = chai.should() ;
 
-const { ExternalLfsrByteRing } = require('../../prng/external-lfsr-byte-ring')
-const taps = require('../../prng/lfsr-taps')
+const { ExternalLfsrByteRing } = require('../../../../../ciphers/cipher-helpers/prng/lfsr/external-lfsr-byte-ring')
+const taps = require('../../../../../ciphers/cipher-helpers/prng/lfsr/lfsr-taps')
 
-describe('prng/external-lfsr-byte-ring', () => {
+describe('ciphers/cipher-helpers/prng/lfsr/external-lfsr-byte-ring', () => {
 
     describe('ExternalLfsrByteRing', () => {
 

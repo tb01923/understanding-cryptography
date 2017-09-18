@@ -1,6 +1,7 @@
 const tapLookup = require('./lfsr-taps')
-const { reduce, map, curry, pipe } = require('../general-helpers/functional-bits')
-const { arrayOf, parseIntBinary, clone, join } = require('../general-helpers/common-bits')
+const { getNextByte }  = require('../../bit-ring-byte-generators/ring-helpers')
+const { reduce, map, curry, pipe } = require('../../../../general-helpers/functional-bits')
+const { arrayOf, parseIntBinary, clone, join } = require('../../../../general-helpers/common-bits')
 
 const xor = (a,b) => a ^ b
 
@@ -49,8 +50,8 @@ const getDirectionalFunctions = (direction, n) => {
 // calculateNewBit :: [Number] -> [Bits] -> Bit
 const calculateNewBit = (taps, register) =>
     reduce(
-        (tap1, tap2) => xor(register[tap1], register[tap2]),
-        taps[0],
+        (agg, tap2) => xor(agg, register[tap2]),
+        register[taps[0]],
         taps.slice(1)
     )
 
@@ -83,16 +84,6 @@ const buildShifter = (direction, {n, taps}) => {
 
     return shifter(append, remove, tapIndexes)
 }
-
-// getNextByte
-//  given a number of bits, generate and return a Number of that number of bits
-// getNextByte :: Number -> Number
-const getNextByte = generateBits => pipe([
-    arrayOf,
-    map(generateBits),
-    join(''),
-    parseIntBinary
-])
 
 const ExternalLfsrByteRing = function *(byteLength, initialRegisterBitArray) {
     const n = initialRegisterBitArray.length

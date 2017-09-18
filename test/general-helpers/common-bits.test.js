@@ -1,11 +1,20 @@
-const mocha = require('mocha')
-    , chai = require('chai')
+const chai = require('chai')
     , should = chai.should() ;
 
-const { maxOr, increment, appendToObj, appendToArray, floor_modulo, split,
+const { maxOr, increment, appendToObj, appendToArray, floor_modulo, split, bitArrayFromBinaryString,
     values, keys, join, length, numberOfKeys, gcd } = require('../../general-helpers/common-bits')
 
 describe('general-helpers/common-bits', () => {
+    describe('bitArrayFromBinaryString', () => {
+        it('should work on an empty string', () => {
+            bitArrayFromBinaryString('').should.be.an('array').with.a.lengthOf(0);
+        })
+        it('should work on a string', () => {
+            bitArrayFromBinaryString('10').should.be.an('array').with.a.lengthOf(2).and.include(1);
+            bitArrayFromBinaryString('10').should.be.an('array').with.a.lengthOf(2).and.include(0);
+        })
+    })
+
     describe('maxOr', () => {
         it('maxOr should return the max of an array not default value', () => {
             maxOr(-1, [10,22,10]).should.be.equal(22) ;

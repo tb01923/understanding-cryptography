@@ -1,5 +1,4 @@
-const mocha = require('mocha')
-    , chai = require('chai')
+const chai = require('chai')
     , should = chai.should() ;
 
 const { arrayToAlphabetMap, getNextValue } = require('../../../ciphers/cipher-helpers/alphabet-map')

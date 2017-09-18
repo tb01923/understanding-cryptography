@@ -1,20 +1,10 @@
-const mocha = require('mocha')
-    , chai = require('chai')
+const chai = require('chai')
     , should = chai.should() ;
 
-const { keyBitArrayFromString, ByteKeyRing } = require('../../../ciphers/cipher-helpers/byte-key-ring')
+const { ByteKeyRing } = require('../../../../ciphers/cipher-helpers/bit-ring-byte-generators/byte-key-ring')
 
-describe('ciphers/cipher-helpers/byte-key-ring', () => {
+describe('ciphers/cipher-helpers/bit-ring-byte-generators/byte-key-ring', () => {
 
-    describe('keyBitArrayFromString', () => {
-        it('should work on an empty string', () => {
-            keyBitArrayFromString('').should.be.an('array').with.a.lengthOf(0);
-        })
-        it('should work on a string', () => {
-            keyBitArrayFromString('10').should.be.an('array').with.a.lengthOf(2).and.include(1);
-            keyBitArrayFromString('10').should.be.an('array').with.a.lengthOf(2).and.include(0);
-        })
-    })
     describe('ByteKeyRing', () => {
         it('should be instantiable to a Generator', () => {
             ByteKeyRing(8, [0,1,0]).toString().should.include('Generator')

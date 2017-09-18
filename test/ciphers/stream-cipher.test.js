@@ -1,8 +1,8 @@
-const mocha = require('mocha')
-    , chai = require('chai')
+const chai = require('chai')
     , should = chai.should() ;
 
-const { xor, bufferOf, readBuffer, cipherBuffer, streamCipher } = require('../../ciphers/stream-cipher')
+const { xor, bufferOf, readBuffer, cipherBuffer,
+    byteKeyGenerator, transformInput, streamCipher } = require('../../ciphers/stream-cipher')
 
 const { Readable } = require('stream');
 const readStreamFromString = s =>
@@ -113,5 +113,37 @@ describe('ciphers/stream-cipher', () => {
         })
     })
 
+    describe('byteKeyGenerator', () => {
+        it('should return a funciton', () => {
+            byteKeyGenerator([1]).should.be.a('function')
+        })
+        it('given 8 bit arrray it should always return the same byte', () => {
+            const always2 =byteKeyGenerator([0,0,0,0,0,0,1,0])
+            always2().should.equal(2)
+            always2().should.equal(2)
+        })
+        it('given a one bit array it should repeat that value 8 times', () => {
+            byteKeyGenerator([1])().should.equal(255)
+            byteKeyGenerator([0])().should.equal(0)
+        })
+        it('given 4 bit arrray it should repeat', () => {
+            byteKeyGenerator([0,0,0,1])().should.equal(17)
+        })
+    })
+
+    describe('transformInput', () => {
+        const always = (x) => () => x
+        const transformBy1 = transformInput(always(1))
+        const transformBy0 = transformInput(always(0))
+        const bufferOf1 = bufferOf(1)
+        const bufferOf0 = bufferOf(0)
+
+        it('should support the XOR truth table through buffers', () => {
+            transformBy1(bufferOf1).should.deep.equal(bufferOf0)
+            transformBy1(bufferOf0).should.deep.equal(bufferOf1)
+            transformBy0(bufferOf1).should.deep.equal(bufferOf1)
+            transformBy0(bufferOf0).should.deep.equal(bufferOf0)
+        })
+    })
 
 })
