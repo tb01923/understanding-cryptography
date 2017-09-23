@@ -1,9 +1,9 @@
-    const chai = require('chai')
+const chai = require('chai')
     , should = chai.should() ;
 
-const {register, registerRulesMap} = require('../../../register-a')
-const {arrayOf} = require('../../../general-helpers/common-bits');
-const {reduce} = require('../../../general-helpers/functional-bits');
+const {register, registerRulesMap} = require('../../../../ciphers/cipher-helpers/trivium/register')
+const {arrayOf} = require('../../../../general-helpers/common-bits');
+const {reduce} = require('../../../../general-helpers/functional-bits');
 const registerARules = registerRulesMap["a"] ;
 
 const arrayOfZero = arrayOf(0)
@@ -37,7 +37,7 @@ const registerWithOnesAt = l => reduce(
 
 */
 
-describe('trivium register legacy implementation', function () {
+describe('trivium implementation', function () {
 
     describe('register A',function (){
 

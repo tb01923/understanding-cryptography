@@ -1,5 +1,5 @@
-const {arrayOf, bitArrayFromString, intToBitArray, slice} = require('./general-helpers/common-bits')
-const {flatten, pipe, curry, map, reduce} = require('./general-helpers/functional-bits')
+const {arrayOf, bitArrayFromString, intToBitArray, slice} = require('../../../general-helpers/common-bits')
+const {flatten, pipe, curry, map, reduce} = require('../../../general-helpers/functional-bits')
 
 const padded16BitArrayFromString = bitArrayFromString(16)
 const arrayOf0s = arrayOf(0)
@@ -17,7 +17,7 @@ const registerRulesMap = {
 }
 
 // http://basecase.org/trivium/
-function register(state, {xor1, xor2, and1, and2, feedback}, label) {
+function register(state, {xor1, xor2, and1, and2, feedback}) {
     const ceil = state.length;
     let ptr = 0;
 
@@ -59,10 +59,6 @@ function register(state, {xor1, xor2, and1, and2, feedback}, label) {
             streamOuput, crossRegisterOutput
         ]
     }
-
-    // this.getFeedback = function(){
-    //     return [feedback, this.getIndexOf(feedback), this.get(feedback)]
-    // }
 
     const getNewBit = function(input) {
         return get(feedback) ^ input;
@@ -107,19 +103,19 @@ const stringToZeroPaddedRegisterInput = (length) => pipe([
 ])
 
 
-const aRegister = (key, l) =>  register(
+const aRegister = (key) =>  register(
         stringToZeroPaddedRegisterInput(registerRulesMap['a'].length)(key),
-        registerRulesMap['a'], l
+        registerRulesMap['a']
 );
 
-const bRegister = (iv, l) =>  register(
+const bRegister = (iv) =>  register(
         stringToZeroPaddedRegisterInput(registerRulesMap['b'].length)(iv),
-        registerRulesMap['b'], l
+        registerRulesMap['b']
 )
 
-const cRegister = (l) =>  register(
+const cRegister = () =>  register(
         prefixFillToTargetLength(1, registerRulesMap['c'].length, arrayOf0s(108)),
-        registerRulesMap['c'], l
+        registerRulesMap['c']
 ) ;
 
 module.exports = {register, aRegister, bRegister,cRegister, stringToZeroPaddedRegisterInput, registerRulesMap}

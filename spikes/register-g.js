@@ -1,5 +1,5 @@
-const {arrayOf, bitArrayFromString, intToBitArray, slice} = require('./general-helpers/common-bits')
-const {flatten, pipe, curry, map} = require('./general-helpers/functional-bits')
+const {arrayOf, bitArrayFromString, intToBitArray, slice} = require('../general-helpers/common-bits')
+const {flatten, pipe, curry, map} = require('../general-helpers/functional-bits')
 
 
 const padded16BitArrayFromString = bitArrayFromString(16)

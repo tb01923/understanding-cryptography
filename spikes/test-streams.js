@@ -10,7 +10,7 @@ const readStreamFromString = s =>
     return r
 }
 
-const {streamCipher} = require('./ciphers/stream-cipher')
+const {streamCipher} = require('../ciphers/stream-cipher')
 
 const key = [0,1,0]
 const encrypt = streamCipher(key)

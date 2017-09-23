@@ -14,11 +14,6 @@ const cipherBuffer = (keyByte, byteBuffer) => {
     return cipherByteBuffer
 }
 
-const byteKeyGenerator = (byteKeyArray) => {
-    const byteSize = 8
-    const byteKeyRing = ByteKeyRing(byteSize, byteKeyArray)
-    return () => byteKeyRing.next().value
-}
 
 const transformInput = keyGen => byteBuffer => {
     const keyByte = keyGen()
@@ -26,10 +21,11 @@ const transformInput = keyGen => byteBuffer => {
     return cipherByteBuffer
 }
 
-const streamCipher = (byteKeyArray) =>{
+// :: (() -> Number) -> Generator
+const streamCipher = (nextKey) =>{
 
-    // nextKey :: (() -> Number)
-    const nextKey = byteKeyGenerator(byteKeyArray)
+    // // nextKey ::
+    // const nextKey = byteKeyGenerator(byteKeyArray)
 
     return new Transform({
         transform(byteBuffer, encoding, callback) {
@@ -47,7 +43,6 @@ module.exports = {
     bufferOf,
     readBuffer,
     cipherBuffer,
-    byteKeyGenerator,
     transformInput,
     streamCipher
 }

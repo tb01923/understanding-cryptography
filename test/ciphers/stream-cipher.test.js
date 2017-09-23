@@ -1,8 +1,10 @@
 const chai = require('chai')
     , should = chai.should() ;
 
-const { xor, bufferOf, readBuffer, cipherBuffer,
-    byteKeyGenerator, transformInput, streamCipher } = require('../../ciphers/stream-cipher')
+const { xor, bufferOf, readBuffer, cipherBuffer, transformInput, streamCipher } = require('../../ciphers/stream-cipher')
+const { byteKeyGenerator } = require('../../ciphers/cipher-helpers/bit-ring-byte-generators/byte-key-ring')
+const { lfsrGenerator } = require('../../ciphers/cipher-helpers/prng/lfsr/external-lfsr-byte-ring')
+const { triviumKeyGenerator } = require('../../ciphers/cipher-helpers/trivium/trivium-cipher')
 
 const { Readable } = require('stream');
 const readStreamFromString = s =>
@@ -100,36 +102,133 @@ describe('ciphers/stream-cipher', () => {
     })
 
     describe('streamCipher', () => {
-        it('should be able to encrypt and decrypt a string', () => {
-            const key = [0,1,0]
-            const encrypt = streamCipher(key)
-            const decrypt = streamCipher(key)
+        describe('streamCipher(byteKeyGenerator([0,1,0])', () => {
+            it('should be able to encrypt and decrypt a string', (done) => {
+                const key = [0, 1, 0]
+                const encrypt = streamCipher(byteKeyGenerator(key))
+                const decrypt = streamCipher(byteKeyGenerator(key))
 
-            readStreamFromString("A message from me\n")
-                .pipe(encrypt)
-                .pipe(decrypt)
-                .pipe(process.stdout)
+                // https://stackoverflow.com/questions/23141226/tdd-testing-with-streams-in-nodejs
+                const MemoryStream = require('memorystream');
+                const memStream = MemoryStream.createWriteStream();
 
+                const plainText = "A message from me\n"
+                readStreamFromString(plainText)
+                    .pipe(encrypt)
+                    .pipe(decrypt)
+                    .pipe(memStream)
+                    .on('finish', () => {
+                        memStream.toString().should.equal(plainText);
+                        done();
+                    });
+            })
+
+        })
+        describe('streamCipher(lfsrGenerator([0,1,1,0])', () => {
+            it('should be able to encrypt a string which should be different than the plain', (done) => {
+                const key = [0, 1, 1, 0]
+                const encrypt = streamCipher(lfsrGenerator(key))
+
+                // https://stackoverflow.com/questions/23141226/tdd-testing-with-streams-in-nodejs
+                const MemoryStream = require('memorystream');
+                const memStream = MemoryStream.createWriteStream();
+
+                const plainText = "A message from me\n"
+                readStreamFromString(plainText)
+                    .pipe(encrypt)
+                    .pipe(memStream)
+                    .on('finish', () => {
+                        memStream.toString().should.not.equal(plainText);
+                        done();
+                    });
+            })
+
+            it('should be able to encrypt and decrypt a string', (done) => {
+                const key = [0, 1, 1, 0]
+                const encrypt = streamCipher(lfsrGenerator(key))
+                const decrypt = streamCipher(lfsrGenerator(key))
+
+                // https://stackoverflow.com/questions/23141226/tdd-testing-with-streams-in-nodejs
+                const MemoryStream = require('memorystream');
+                const memStream = MemoryStream.createWriteStream();
+
+                const plainText = "A message from me\n"
+                readStreamFromString(plainText)
+                    .pipe(encrypt)
+                    .pipe(decrypt)
+                    .pipe(memStream)
+                    .on('finish', () => {
+                        memStream.toString().should.equal(plainText);
+                        done();
+                    });
+            })
+
+        })
+
+        describe('streamCipher(triviumKeyGenerator("someKey", "someIV")', () => {
+            it('should be able to encrypt a string which should be different than the plain', (done) => {
+                const key = 'someKey'
+                const iv = 'someIV'
+                const encrypt = streamCipher(triviumKeyGenerator(key, iv))
+
+                // https://stackoverflow.com/questions/23141226/tdd-testing-with-streams-in-nodejs
+                const MemoryStream = require('memorystream');
+                const memStream = MemoryStream.createWriteStream();
+
+                const plainText = "A message from me\n"
+                readStreamFromString(plainText)
+                    .pipe(encrypt)
+                    .pipe(memStream)
+                    .on('finish', () => {
+                        memStream.toString().should.not.equal(plainText);
+                        done();
+                    });
+            })
+
+            it('should be able to encrypt and decrypt a string', (done) => {
+                const key = 'someKey'
+                const iv = 'someIV'
+                const encrypt = streamCipher(triviumKeyGenerator(key, iv))
+                const decrypt = streamCipher(triviumKeyGenerator(key, iv))
+
+                // https://stackoverflow.com/questions/23141226/tdd-testing-with-streams-in-nodejs
+                const MemoryStream = require('memorystream');
+                const memStream = MemoryStream.createWriteStream();
+
+                const plainText = "A message from me\n"
+                readStreamFromString(plainText)
+                    .pipe(encrypt)
+                    .pipe(decrypt)
+                    .pipe(memStream)
+                    .on('finish', () => {
+                        memStream.toString().should.equal(plainText);
+                        done();
+                    });
+            })
+            it('should not be able be able to encrypt and decrypt with different keys', (done) => {
+                const key = 'someKey'
+                const key2 = 'someOtherKey'
+                const iv = 'someIV'
+                const encrypt = streamCipher(triviumKeyGenerator(key, iv))
+                const decrypt = streamCipher(triviumKeyGenerator(key2, iv))
+
+                // https://stackoverflow.com/questions/23141226/tdd-testing-with-streams-in-nodejs
+                const MemoryStream = require('memorystream');
+                const memStream = MemoryStream.createWriteStream();
+
+                const plainText = "A message from me\n"
+                readStreamFromString(plainText)
+                    .pipe(encrypt)
+                    .pipe(decrypt)
+                    .pipe(memStream)
+                    .on('finish', () => {
+                        memStream.toString().should.not.equal(plainText);
+                        done();
+                    });
+            })
         })
     })
 
-    describe('byteKeyGenerator', () => {
-        it('should return a funciton', () => {
-            byteKeyGenerator([1]).should.be.a('function')
-        })
-        it('given 8 bit arrray it should always return the same byte', () => {
-            const always2 =byteKeyGenerator([0,0,0,0,0,0,1,0])
-            always2().should.equal(2)
-            always2().should.equal(2)
-        })
-        it('given a one bit array it should repeat that value 8 times', () => {
-            byteKeyGenerator([1])().should.equal(255)
-            byteKeyGenerator([0])().should.equal(0)
-        })
-        it('given 4 bit arrray it should repeat', () => {
-            byteKeyGenerator([0,0,0,1])().should.equal(17)
-        })
-    })
 
     describe('transformInput', () => {
         const always = (x) => () => x
@@ -145,5 +244,4 @@ describe('ciphers/stream-cipher', () => {
             transformBy0(bufferOf0).should.deep.equal(bufferOf0)
         })
     })
-
 })

@@ -1,7 +1,3 @@
-const {arrayOf, bitArrayFromString, intToBitArray, slice} = require('./general-helpers/common-bits')
-const {flatten, pipe, curry, map, reduce} = require('./general-helpers/functional-bits')
-
-
 const shift = r => i => {
     const o = r.getOutput()
     r.shiftWith(i)
@@ -10,7 +6,7 @@ const shift = r => i => {
 const key = "aaaaa"
 const iv = "some iv"
 const {aRegisterG, bRegisterG,cRegisterG} = require('./register-g')
-const {aRegister, bRegister,cRegister} = require('./register-a')
+const {aRegister, bRegister,cRegister} = require('../ciphers/cipher-helpers/trivium/register')
 const A = aRegister(key) ;
 const A2 = aRegister(key) ;
 

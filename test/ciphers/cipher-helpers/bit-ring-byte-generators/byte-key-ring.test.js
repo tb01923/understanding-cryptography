@@ -1,9 +1,28 @@
 const chai = require('chai')
     , should = chai.should() ;
 
-const { ByteKeyRing } = require('../../../../ciphers/cipher-helpers/bit-ring-byte-generators/byte-key-ring')
+const { byteKeyGenerator, ByteKeyRing } = require('../../../../ciphers/cipher-helpers/bit-ring-byte-generators/byte-key-ring')
 
 describe('ciphers/cipher-helpers/bit-ring-byte-generators/byte-key-ring', () => {
+
+    describe('byteKeyGenerator', () => {
+        it('should return a funciton', () => {
+            byteKeyGenerator([1]).should.be.a('function')
+        })
+        it('given 8 bit arrray it should always return the same byte', () => {
+            const always2 =byteKeyGenerator([0,0,0,0,0,0,1,0])
+            always2().should.equal(2)
+            always2().should.equal(2)
+        })
+        it('given a one bit array it should repeat that value 8 times', () => {
+            byteKeyGenerator([1])().should.equal(255)
+            byteKeyGenerator([0])().should.equal(0)
+        })
+        it('given 4 bit arrray it should repeat', () => {
+            byteKeyGenerator([0,0,0,1])().should.equal(17)
+        })
+    })
+
 
     describe('ByteKeyRing', () => {
         it('should be instantiable to a Generator', () => {

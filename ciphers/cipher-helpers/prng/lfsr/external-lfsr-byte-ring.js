@@ -1,7 +1,7 @@
 const tapLookup = require('./lfsr-taps')
 const { getNextByte }  = require('../../bit-ring-byte-generators/ring-helpers')
-const { reduce, map, curry, pipe } = require('../../../../general-helpers/functional-bits')
-const { arrayOf, parseIntBinary, clone, join } = require('../../../../general-helpers/common-bits')
+const { reduce, map, curry } = require('../../../../general-helpers/functional-bits')
+const { clone } = require('../../../../general-helpers/common-bits')
 
 const xor = (a,b) => a ^ b
 
@@ -111,6 +111,13 @@ const ExternalLfsrByteRing = function *(byteLength, initialRegisterBitArray) {
     }
 }
 
+const lfsrGenerator = (byteKeyArray) => {
+    const byteSize = 8
+    const lfsrRing = ExternalLfsrByteRing(byteSize, byteKeyArray)
+    return () => lfsrRing.next().value
+}
+
 module.exports = {
-    ExternalLfsrByteRing
+    ExternalLfsrByteRing,
+    lfsrGenerator
 }

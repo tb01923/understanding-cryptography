@@ -28,8 +28,15 @@ const ByteKeyRing = function *(byteLength, keyBitArray) {
     }
 }
 
+const byteKeyGenerator = (byteKeyArray) => {
+    const byteSize = 8
+    const byteKeyRing = ByteKeyRing(byteSize, byteKeyArray)
+    return () => byteKeyRing.next().value
+}
+
 
 
 module.exports = {
-    ByteKeyRing
+    ByteKeyRing,
+    byteKeyGenerator
 }
