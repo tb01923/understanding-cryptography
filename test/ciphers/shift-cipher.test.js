@@ -10,30 +10,26 @@ describe('ciphers/shift-cipher', () => {
     describe('encryptCharacter', () => {
         it('should encrypt a character that does not need to wrap around the end of the alphabet', () => {
             const simpleMap =  {'a': 0, 'b': 1}
-            const m = numberOfKeys(simpleMap)
             const k = 1
-            encryptCharacter(simpleMap, k, m, 'a').should.equal('b')
+            encryptCharacter(simpleMap, k, 'a').should.equal('b')
         })
         it('should encrypt a character that needs to wrap around the end of the alphabet', () => {
             const simpleMap =  {'a': 0, 'z': 1}
-            const m = numberOfKeys(simpleMap)
             const k = 1
-            encryptCharacter(simpleMap, k, m, 'z').should.equal('a')
+            encryptCharacter(simpleMap, k, 'z').should.equal('a')
         })
     })
 
     describe('decryptCharacter', () => {
         it('should decrypt a character that does not need to wrap around the end of the alphabet', () => {
             const simpleMap =  {'a': 0, 'b': 1}
-            const m = numberOfKeys(simpleMap)
             const k = 1
-            decryptCharacter(simpleMap, k, m, 'b').should.equal('a')
+            decryptCharacter(simpleMap, k, 'b').should.equal('a')
         })
         it('should decrypt a character that needs to wrap around the end of the alphabet', () => {
             const simpleMap =  {'a': 0, 'z': 1}
-            const m = numberOfKeys(simpleMap)
             const k = 1
-            decryptCharacter(simpleMap, k, m, 'a').should.equal('z')
+            decryptCharacter(simpleMap, k, 'a').should.equal('z')
         })
     })
 
