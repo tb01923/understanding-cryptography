@@ -40,14 +40,14 @@ const append = curry((xs, x) =>
 )
 
 // appendingCombiner :: (a -> b) -> ([b], a) -> [b]
-const appendingCombiner = f =>
+const transformingAppender = f =>
     (agg, x) =>
         append(agg, f(x))
 
 // map :: (a -> b) -> [a] -> [b]
 const map = curry((f, xs) =>
     reduce(
-        appendingCombiner(f)
+        transformingAppender(f)
         , []
         , xs))
 

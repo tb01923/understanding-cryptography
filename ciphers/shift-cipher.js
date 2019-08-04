@@ -1,30 +1,9 @@
 const {arrayToAlphabetMap } = require('./cipher-helpers/alphabet-map')
-const {reduce, pipe, curry, findKeyByValue} = require('../general-helpers/functional-bits')
-const {appendToArray, join,  floor_modulo, numberOfKeys } = require('../general-helpers/common-bits')
+const {pipe, curry, map, findKeyByValue} = require('../general-helpers/functional-bits')
+const {join,  floor_modulo, numberOfKeys } = require('../general-helpers/common-bits')
 
-
-// appendToArrayReducer :: ({character: Number} -> Number -> character -> character) ->
-//                                    {character: Number} -> Number -> [character] -> character -> [character]
-const appendToArrayReducer = curry((algo, alphabetMap, k, arr, x) =>
-    appendToArray(
-        arr, algo(alphabetMap, k, x)
-    )
-)
-
-// applyWith :: ({character: Number} -> Number -> character -> character) ->
-//                                {character: Number} -> Number -> [character] -> [character]
-const applyWith = curry((algo, alphabetMap, k, xs) =>
-    reduce(
-        appendToArrayReducer(algo, alphabetMap, k)
-        ,[]
-        , xs
-    )
-)
-
-// applyWith :: ({character: Number} -> Number -> character -> character) ->
-//                                {character: Number} -> Number -> String -> String
-const applyWithAsString = (algo, alphabetMap, k) => pipe([
-    applyWith(algo, alphabetMap, k),
+const applyAlgoToString = algo => pipe([
+    map(algo),
     join('')
 ])
 
@@ -51,9 +30,12 @@ const shiftCipher = (alphabet, k) => {
     const alphabetArray = alphabet.split('')
     const alphabetMap = arrayToAlphabetMap(alphabetArray)
 
+    const encryptString = applyAlgoToString(encryptCharacter(alphabetMap, k))
+    const decryptString = applyAlgoToString(decryptCharacter(alphabetMap, k))
+
     return {
-        encrypt: applyWithAsString(encryptCharacter, alphabetMap, k),
-        decrypt: applyWithAsString(decryptCharacter, alphabetMap, k),
+        encrypt: encryptString,
+        decrypt: decryptString
     }
 }
 
